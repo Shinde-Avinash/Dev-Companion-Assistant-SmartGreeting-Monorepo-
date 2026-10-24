@@ -41,7 +41,10 @@ try {
         Copy-Item -Path (Join-Path $root "LICENSE") -Destination (Join-Path $extensionDir "LICENSE") -Force
     }
 
-    $iconPath = Join-Path $root "src\SmartGreeting.Vsix\Resources\icon.png"
+    $iconPath = Join-Path $root "src\SmartGreeting.VsCode\icon.png"
+    if (!(Test-Path $iconPath)) {
+        $iconPath = Join-Path $root "src\SmartGreeting.Vsix\Resources\icon.png"
+    }
     if (Test-Path $iconPath) {
         Copy-Item -Path $iconPath -Destination (Join-Path $extensionDir "icon.png") -Force
     }

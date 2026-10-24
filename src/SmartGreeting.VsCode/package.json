@@ -4,6 +4,7 @@
   "description": "Modern, context-aware greetings with customizable working hours, day-of-week intelligence, anti-repetition, and Windows 11 Fluent design.",
   "version": "1.0.0",
   "publisher": "avi",
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.75.0"
   },
