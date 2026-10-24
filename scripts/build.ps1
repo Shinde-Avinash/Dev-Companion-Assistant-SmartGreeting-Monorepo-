@@ -29,6 +29,9 @@ if (Test-Path $userDotnetExe) {
 $sdkVersion = & $dotnetCmd --version
 Write-Host "[+] Using .NET SDK: $sdkVersion" -ForegroundColor Green
 
+# Stop any running preview instances that could lock DLLs
+Get-Process SmartGreeting.Preview -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+
 # 2. Build Solution
 $slnPath = Join-Path $root "SmartGreeting.sln"
 Write-Host "[+] Building solution ($Configuration)..." -ForegroundColor Cyan

@@ -15,58 +15,51 @@ Write-Host "==========================================================" -Foregro
 
 # 1. Ensure VSIX exists
 if (!(Test-Path $resolvedVsix)) {
-    Write-Host "[!] VSIX not found at $resolvedVsix. Building now..." -ForegroundColor Yellow
-    & "$PSScriptRoot\build.ps1"
+    Write-Host "[!] VSIX not found. Packaging now..." -ForegroundColor Yellow
+    & "$PSScriptRoot\package-vscode.ps1"
 }
 
 if (!(Test-Path $resolvedVsix)) {
-    throw "VSIX file could not be generated at $resolvedVsix."
+    throw "VSIX file not found at $resolvedVsix."
 }
 
-# 2. Check if Visual Studio is running
-$runningVs = Get-Process devenv -ErrorAction SilentlyContinue
-if ($runningVs) {
-    Write-Host ""
-    Write-Host "⚠️  ATTENTION: Visual Studio (devenv.exe) is currently running!" -ForegroundColor Yellow
-    Write-Host "   Visual Studio locks extension assemblies while running." -ForegroundColor Yellow
-    Write-Host "   Please save your work and close Visual Studio, then press ENTER to continue..." -ForegroundColor Yellow
-    if (-not $Force) {
-        Read-Host "Press ENTER after closing Visual Studio (or Ctrl+C to cancel)"
+# 2. Check for Visual Studio Code CLI
+$codeCmd = Get-Command code -ErrorAction SilentlyContinue
+if (-not $codeCmd) {
+    $userCode = "C:\Users\om\AppData\Local\Programs\Microsoft VS Code\bin\code.cmd"
+    if (Test-Path $userCode) {
+        $codeCmd = $userCode
     }
 }
 
-# 3. Locate VSIXInstaller.exe
-$installerPaths = @(
-    "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\VSIXInstaller.exe",
-    "C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\VSIXInstaller.exe",
-    "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\VSIXInstaller.exe",
-    "C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\VSIXInstaller.exe",
-    "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\VSIXInstaller.exe",
-    "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\VSIXInstaller.exe",
-    "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\VSIXInstaller.exe"
-)
+$installed = $false
 
-$vsixInstaller = $installerPaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+if ($codeCmd) {
+    Write-Host "[+] Detected Visual Studio Code. Installing extension..." -ForegroundColor Green
+    & $codeCmd --install-extension $resolvedVsix --force
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "==========================================================" -ForegroundColor Green
+        Write-Host "   Extension 'SmartGreeting' successfully installed into VS Code!" -ForegroundColor Green
+        Write-Host "   Restart or Reload VS Code window to activate." -ForegroundColor White
+        Write-Host "==========================================================" -ForegroundColor Green
+        $installed = $true
+    }
+}
 
-if ($vsixInstaller) {
-    Write-Host "[+] Found Visual Studio VSIX Installer: $vsixInstaller" -ForegroundColor Green
-    Write-Host "[+] Launching VSIX Installer dialog..." -ForegroundColor Cyan
-    Start-Process -FilePath $vsixInstaller -ArgumentList "`"$resolvedVsix`""
-} else {
-    Write-Host "[+] Launching VSIX with default Windows file association..." -ForegroundColor Cyan
-    try {
+# 3. Check for Visual Studio IDE VSIXInstaller.exe if not installed in VS Code
+if (-not $installed) {
+    $installerPaths = @(
+        "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\VSIXInstaller.exe",
+        "C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\VSIXInstaller.exe",
+        "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\VSIXInstaller.exe",
+        "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\VSIXInstaller.exe"
+    )
+    $vsixInstaller = $installerPaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+
+    if ($vsixInstaller) {
+        Write-Host "[+] Detected Visual Studio IDE installer: $vsixInstaller" -ForegroundColor Green
+        Start-Process -FilePath $vsixInstaller -ArgumentList "`"$resolvedVsix`""
+    } else {
         Start-Process -FilePath $resolvedVsix
-    } catch {
-        Write-Host "[!] Could not automatically launch VSIXInstaller." -ForegroundColor Yellow
-        Write-Host "    You can manually double-click the file to install:" -ForegroundColor White
-        Write-Host "    $resolvedVsix" -ForegroundColor Green
     }
 }
-
-Write-Host ""
-Write-Host "==========================================================" -ForegroundColor Green
-Write-Host "   Installation / Update Instructions:" -ForegroundColor Green
-Write-Host "   1. Click 'Install' or 'Modify' in the VSIX Installer dialog." -ForegroundColor White
-Write-Host "   2. Once finished, open Visual Studio." -ForegroundColor White
-Write-Host "   3. SmartGreeting will welcome you on startup!" -ForegroundColor White
-Write-Host "==========================================================" -ForegroundColor Green

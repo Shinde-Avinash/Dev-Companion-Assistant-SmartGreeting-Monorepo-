@@ -1,0 +1,105 @@
+{
+  "name": "smartgreeting",
+  "displayName": "SmartGreeting — Intelligent Greetings for VS Code",
+  "description": "Modern, context-aware greetings with customizable working hours, day-of-week intelligence, anti-repetition, and Windows 11 Fluent design.",
+  "version": "1.0.0",
+  "publisher": "avi",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "greeting",
+    "morning",
+    "welcome",
+    "productivity",
+    "time",
+    "fluent"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "smartGreeting.showGreeting",
+        "title": "SmartGreeting: Show Greeting",
+        "category": "SmartGreeting"
+      },
+      {
+        "command": "smartGreeting.openSettings",
+        "title": "SmartGreeting: Configure Settings",
+        "category": "SmartGreeting"
+      },
+      {
+        "command": "smartGreeting.showAbout",
+        "title": "SmartGreeting: About",
+        "category": "SmartGreeting"
+      }
+    ],
+    "configuration": {
+      "title": "SmartGreeting",
+      "properties": {
+        "smartGreeting.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable SmartGreeting notifications."
+        },
+        "smartGreeting.name": {
+          "type": "string",
+          "default": "Avi",
+          "description": "Your name for personalized greetings (e.g. Avi). Falls back to 'Developer' if empty."
+        },
+        "smartGreeting.workingHoursStart": {
+          "type": "string",
+          "default": "09:00",
+          "description": "Work day start time in 24-hour HH:mm format."
+        },
+        "smartGreeting.workingHoursEnd": {
+          "type": "string",
+          "default": "18:00",
+          "description": "Work day end time in 24-hour HH:mm format."
+        },
+        "smartGreeting.frequency": {
+          "type": "string",
+          "enum": [
+            "oncePerSession",
+            "oncePerDay",
+            "everyStartup",
+            "manualOnly"
+          ],
+          "default": "oncePerSession",
+          "description": "How often greetings should appear."
+        },
+        "smartGreeting.showOnStartup": {
+          "type": "boolean",
+          "default": true,
+          "description": "Display greeting when VS Code launches."
+        },
+        "smartGreeting.lateNightMessages": {
+          "type": "boolean",
+          "default": true,
+          "description": "Display friendly, encouraging messages late at night."
+        },
+        "smartGreeting.weekendMessages": {
+          "type": "boolean",
+          "default": true,
+          "description": "Display special messages on Saturdays and Sundays."
+        },
+        "smartGreeting.displayStyle": {
+          "type": "string",
+          "enum": [
+            "floatingCard",
+            "toastNotification",
+            "both"
+          ],
+          "default": "floatingCard",
+          "description": "Choose between modern Fluent floating card, standard notification, or both."
+        }
+      }
+    }
+  }
+}
