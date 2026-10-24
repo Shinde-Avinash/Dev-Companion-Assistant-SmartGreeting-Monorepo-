@@ -8,6 +8,7 @@
 [![Offline First](https://img.shields.io/badge/Network-100%25%20Offline-success.svg)]()
 
 ---
+<img width="1314" height="626" alt="image" src="https://github.com/user-attachments/assets/1bb973b8-104e-48b5-a8ac-a862d7f97651" />
 
 ## 👨‍💻 Creator & Community
 
