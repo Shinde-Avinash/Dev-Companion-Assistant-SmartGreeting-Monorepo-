@@ -34,11 +34,14 @@ try {
     Copy-Item -Path "$srcDir\package.json" -Destination $extensionDir -Force
     Copy-Item -Path "$srcDir\extension.js" -Destination $extensionDir -Force
 
-    if (Test-Path (Join-Path $root "README.md")) {
+    $vscodeReadme = Join-Path $srcDir "README.md"
+    if (Test-Path $vscodeReadme) {
+        Copy-Item -Path $vscodeReadme -Destination (Join-Path $extensionDir "README.md") -Force
+    } elseif (Test-Path (Join-Path $root "README.md")) {
         Copy-Item -Path (Join-Path $root "README.md") -Destination (Join-Path $extensionDir "README.md") -Force
     }
     if (Test-Path (Join-Path $root "LICENSE")) {
-        Copy-Item -Path (Join-Path $root "LICENSE") -Destination (Join-Path $extensionDir "LICENSE") -Force
+        Copy-Item -Path (Join-Path $root "LICENSE") -Destination (Join-Path $extensionDir "LICENSE.txt") -Force
     }
 
     $iconPath = Join-Path $root "src\SmartGreeting.VsCode\icon.png"
@@ -49,45 +52,85 @@ try {
         Copy-Item -Path $iconPath -Destination (Join-Path $extensionDir "icon.png") -Force
     }
 
-    # 4. Generate extension.vsixmanifest at root of VSIX
+    # 4. Generate extension.vsixmanifest at root of VSIX exactly matching VS Code vsce template
     $manifestXml = '<?xml version="1.0" encoding="utf-8"?>
-<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-  <Metadata>
-    <Identity Id="smartgreeting" Version="1.0.0" Language="en-US" Publisher="avi" />
-    <DisplayName>SmartGreeting — Intelligent Greetings for VS Code</DisplayName>
-    <Description xml:space="preserve">Modern, context-aware greetings with customizable working hours, day-of-week intelligence, anti-repetition, and Windows 11 Fluent design.</Description>
-    <Icon>extension/icon.png</Icon>
-  </Metadata>
-  <Installation>
-    <InstallationTarget Id="Microsoft.VisualStudio.Code" />
-  </Installation>
-  <Dependencies />
-  <Assets>
-    <Asset Type="Microsoft.VisualStudio.Code.Manifest" Path="extension/package.json" Addressable="true" />
-    <Asset Type="Microsoft.VisualStudio.Services.Content.Details" Path="extension/README.md" Addressable="true" />
-    <Asset Type="Microsoft.VisualStudio.Services.Content.License" Path="extension/LICENSE" Addressable="true" />
-  </Assets>
-</PackageManifest>'
-    [System.IO.File]::WriteAllText((Join-Path $stagingDir "extension.vsixmanifest"), $manifestXml)
+	<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+		<Metadata>
+			<Identity Language="en-US" Id="dev-companion-assistant" Version="1.3.1" Publisher="AvinashShinde"/>
+			<DisplayName>Dev Companion Assistant</DisplayName>
+			<Description xml:space="preserve">All-in-one developer companion: Context-aware greetings, motivational thoughts, dev humor, plus scheduled water, coffee, lunch, and posture wellness reminders.</Description>
+			<Tags>greeting,wellness,water-reminder,coffee-break,lunch-reminder,posture,health,productivity,fluent</Tags>
+			<Categories>Other</Categories>
+			<GalleryFlags>Public</GalleryFlags>
+			
+			<Properties>
+				<Property Id="Microsoft.VisualStudio.Code.Engine" Value="^1.75.0" />
+				<Property Id="Microsoft.VisualStudio.Code.ExtensionDependencies" Value="" />
+				<Property Id="Microsoft.VisualStudio.Code.ExtensionPack" Value="" />
+				<Property Id="Microsoft.VisualStudio.Code.ExtensionKind" Value="workspace,web" />
+				<Property Id="Microsoft.VisualStudio.Code.LocalizedLanguages" Value="" />
+				<Property Id="Microsoft.VisualStudio.Code.EnabledApiProposals" Value="" />
+				
+				<Property Id="Microsoft.VisualStudio.Code.ExecutesCode" Value="true" />
+				
+				<Property Id="Microsoft.VisualStudio.Services.Links.Source" Value="https://github.com/AvinashShinde/smart-greeting-assistant" />
+				<Property Id="Microsoft.VisualStudio.Services.Links.Getstarted" Value="https://github.com/AvinashShinde/smart-greeting-assistant" />
+				<Property Id="Microsoft.VisualStudio.Services.Links.GitHub" Value="https://github.com/AvinashShinde/smart-greeting-assistant" />
+				<Property Id="Microsoft.VisualStudio.Services.Links.Support" Value="https://github.com/AvinashShinde/smart-greeting-assistant/issues" />
+				
+				<Property Id="Microsoft.VisualStudio.Services.GitHubFlavoredMarkdown" Value="true" />
+				<Property Id="Microsoft.VisualStudio.Services.Content.Pricing" Value="Free"/>
+			</Properties>
+			<License>extension/LICENSE.txt</License>
+			<Icon>extension/icon.png</Icon>
+		</Metadata>
+		<Installation>
+			<InstallationTarget Id="Microsoft.VisualStudio.Code"/>
+		</Installation>
+		<Dependencies/>
+		<Assets>
+			<Asset Type="Microsoft.VisualStudio.Code.Manifest" Path="extension/package.json" Addressable="true" />
+			<Asset Type="Microsoft.VisualStudio.Services.Content.Details" Path="extension/README.md" Addressable="true" />
+			<Asset Type="Microsoft.VisualStudio.Services.Content.License" Path="extension/LICENSE.txt" Addressable="true" />
+			<Asset Type="Microsoft.VisualStudio.Services.Icons.Default" Path="extension/icon.png" Addressable="true" />
+		</Assets>
+	</PackageManifest>'
 
-    # 5. Generate [Content_Types].xml at root of VSIX
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllText((Join-Path $stagingDir "extension.vsixmanifest"), $manifestXml, $utf8NoBom)
+
+    # 5. Generate [Content_Types].xml matching vsce format
     $contentTypesXml = '<?xml version="1.0" encoding="utf-8"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-  <Default Extension="vsixmanifest" ContentType="text/xml" />
-  <Default Extension="json" ContentType="application/json" />
-  <Default Extension="js" ContentType="application/javascript" />
-  <Default Extension="md" ContentType="text/markdown" />
-  <Default Extension="txt" ContentType="text/plain" />
-  <Default Extension="png" ContentType="image/png" />
-</Types>'
-    [System.IO.File]::WriteAllText((Join-Path $stagingDir "[Content_Types].xml"), $contentTypesXml)
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension=".js" ContentType="application/javascript"/><Default Extension=".json" ContentType="application/json"/><Default Extension=".md" ContentType="text/markdown"/><Default Extension=".png" ContentType="image/png"/><Default Extension=".txt" ContentType="text/plain"/><Default Extension=".vsixmanifest" ContentType="text/xml"/></Types>
+'
+    [System.IO.File]::WriteAllText((Join-Path $stagingDir "[Content_Types].xml"), $contentTypesXml, $utf8NoBom)
 
-    # 6. Create VSIX Archive (ZIP compliant)
+    # 6. Create VSIX Archive with strict POSIX forward-slash separators (mandatory for Marketplace ZIP parser)
+    Add-Type -AssemblyName System.IO.Compression
     Add-Type -AssemblyName System.IO.Compression.FileSystem
 
-    # Create SmartGreeting.vsix
     if (Test-Path $vsixTargetFile) { Remove-Item $vsixTargetFile -Force }
-    [System.IO.Compression.ZipFile]::CreateFromDirectory($stagingDir, $vsixTargetFile, [System.IO.Compression.CompressionLevel]::Optimal, $false)
+    if (Test-Path $vscodeVsixTargetFile) { Remove-Item $vscodeVsixTargetFile -Force }
+
+    $zipStream = [System.IO.File]::Open($vsixTargetFile, [System.IO.FileMode]::Create)
+    $archive = New-Object System.IO.Compression.ZipArchive($zipStream, [System.IO.Compression.ZipArchiveMode]::Create)
+
+    # Get all files in staging directory and add them with normalized forward slashes
+    $allFiles = Get-ChildItem -Path $stagingDir -Recurse -File
+    foreach ($file in $allFiles) {
+        $relativePath = $file.FullName.Substring($stagingDir.Length).TrimStart('\', '/')
+        $entryName = $relativePath.Replace('\', '/')
+        
+        $entry = $archive.CreateEntry($entryName, [System.IO.Compression.CompressionLevel]::Optimal)
+        $fileStream = [System.IO.File]::OpenRead($file.FullName)
+        $entryStream = $entry.Open()
+        $fileStream.CopyTo($entryStream)
+        $entryStream.Dispose()
+        $fileStream.Dispose()
+    }
+
+    $archive.Dispose()
+    $zipStream.Dispose()
 
     # Also keep explicit copy SmartGreeting-VSCode.vsix
     Copy-Item -Path $vsixTargetFile -Destination $vscodeVsixTargetFile -Force

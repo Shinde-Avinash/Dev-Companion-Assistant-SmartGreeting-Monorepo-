@@ -1,11 +1,73 @@
-## Visual Studio & .NET GitIgnore
+## ==============================================================================
+## Operating System & Temporary Files
+## ==============================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+## ==============================================================================
+## Visual Studio & MSBuild
+## ==============================================================================
 .vs/
-bin/
-obj/
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
+*.userprefs
+*.dbmdl
+*.jfm
+*.opendb
+
+# Build output
+[Bb]in/
+[Oo]bj/
+[Aa]rm/
+[Aa]rm64/
+[Xx]64/
+[Xx]86/
+
+# Visual Studio test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.visualstudio/
+
+# Crash dumps & symbol caches
+*.dmp
+*.dump
+*.symbols
+
+## ==============================================================================
+## Node.js & VS Code Extension Packaging
+## ==============================================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Staging directories created during custom packaging
+SmartGreeting_VSCode_VSIX_Staging_*/
+.vscode-test/
+
+# Packaging temporary files
+*.vsixmanifest.tmp
+*.vsix.tmp
+
+## ==============================================================================
+## Logs & Local Developer Run Artifacts
+## ==============================================================================
 *.log
-artifacts/*.vsix.tmp
-TestResults/
+%LOCALAPPDATA%/SmartGreeting/Logs/
+%LOCALAPPDATA%/SmartGreeting/settings.json

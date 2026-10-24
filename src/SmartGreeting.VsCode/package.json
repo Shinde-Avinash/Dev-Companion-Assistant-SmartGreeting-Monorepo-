@@ -1,9 +1,15 @@
 {
-  "name": "smartgreeting",
-  "displayName": "SmartGreeting — Intelligent Greetings for VS Code",
-  "description": "Modern, context-aware greetings with customizable working hours, day-of-week intelligence, anti-repetition, and Windows 11 Fluent design.",
-  "version": "1.0.0",
-  "publisher": "avi",
+  "name": "dev-companion-assistant",
+  "displayName": "Dev Companion Assistant",
+  "description": "All-in-one developer companion: Context-aware greetings, motivational thoughts, dev humor, plus scheduled water, coffee, lunch, and posture wellness reminders.",
+  "version": "1.3.1",
+  "publisher": "AvinashShinde",
+  "author": "Avinash Shinde",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AvinashShinde/smart-greeting-assistant"
+  },
   "icon": "icon.png",
   "engines": {
     "vscode": "^1.75.0"
@@ -13,10 +19,13 @@
   ],
   "keywords": [
     "greeting",
-    "morning",
-    "welcome",
+    "wellness",
+    "water-reminder",
+    "coffee-break",
+    "lunch-reminder",
+    "posture",
+    "health",
     "productivity",
-    "time",
     "fluent"
   ],
   "activationEvents": [
@@ -27,27 +36,47 @@
     "commands": [
       {
         "command": "smartGreeting.showGreeting",
-        "title": "SmartGreeting: Show Greeting",
-        "category": "SmartGreeting"
+        "title": "DevCompanion: Show Dashboard & Greeting",
+        "category": "DevCompanion"
+      },
+      {
+        "command": "smartGreeting.logWater",
+        "title": "DevCompanion: Log Glass of Water 💧",
+        "category": "DevCompanion"
+      },
+      {
+        "command": "smartGreeting.takeBreak",
+        "title": "DevCompanion: Start Coffee/Tea Break ☕",
+        "category": "DevCompanion"
+      },
+      {
+        "command": "smartGreeting.showStretches",
+        "title": "DevCompanion: Quick Ergonomic Stretch Guide 🧘",
+        "category": "DevCompanion"
       },
       {
         "command": "smartGreeting.openSettings",
-        "title": "SmartGreeting: Configure Settings",
-        "category": "SmartGreeting"
+        "title": "DevCompanion: Configure Settings ⚙️",
+        "category": "DevCompanion"
+      },
+      {
+        "command": "smartGreeting.updateName",
+        "title": "DevCompanion: Change Your Name ✏️",
+        "category": "DevCompanion"
       },
       {
         "command": "smartGreeting.showAbout",
-        "title": "SmartGreeting: About",
-        "category": "SmartGreeting"
+        "title": "DevCompanion: About",
+        "category": "DevCompanion"
       }
     ],
     "configuration": {
-      "title": "SmartGreeting",
+      "title": "DevCompanion",
       "properties": {
         "smartGreeting.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Enable or disable SmartGreeting notifications."
+          "description": "Enable or disable DevCompanion notifications and greetings."
         },
         "smartGreeting.name": {
           "type": "string",
@@ -73,12 +102,12 @@
             "manualOnly"
           ],
           "default": "oncePerSession",
-          "description": "How often greetings should appear."
+          "description": "How often startup greetings should appear."
         },
         "smartGreeting.showOnStartup": {
           "type": "boolean",
           "default": true,
-          "description": "Display greeting when VS Code launches."
+          "description": "Display greeting dashboard when VS Code launches."
         },
         "smartGreeting.lateNightMessages": {
           "type": "boolean",
@@ -98,7 +127,77 @@
             "both"
           ],
           "default": "floatingCard",
-          "description": "Choose between modern Fluent floating card, standard notification, or both."
+          "description": "Choose between modern Fluent dashboard popup, standard toast notification, or both."
+        },
+        "smartGreeting.autoCloseSeconds": {
+          "type": "integer",
+          "default": 45,
+          "minimum": 0,
+          "maximum": 300,
+          "description": "Duration in seconds before the popup automatically closes. Set to 0 to keep it open until manually dismissed."
+        },
+        "smartGreeting.showMotivation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show randomized daily motivational quotes and reflections in the dashboard."
+        },
+        "smartGreeting.showMemes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show randomized developer memes, programming jokes, and comedic relief in the dashboard."
+        },
+        "smartGreeting.waterReminder": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable scheduled hydration and water break reminders while coding."
+        },
+        "smartGreeting.waterIntervalMinutes": {
+          "type": "integer",
+          "default": 45,
+          "minimum": 15,
+          "maximum": 180,
+          "description": "Interval in minutes between hydration / water drink reminders."
+        },
+        "smartGreeting.waterDailyGoal": {
+          "type": "integer",
+          "default": 8,
+          "minimum": 1,
+          "maximum": 20,
+          "description": "Daily target number of water glasses (250ml each)."
+        },
+        "smartGreeting.coffeeReminder": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable scheduled coffee and tea break reminders."
+        },
+        "smartGreeting.coffeeIntervalMinutes": {
+          "type": "integer",
+          "default": 90,
+          "minimum": 30,
+          "maximum": 240,
+          "description": "Interval in minutes between coffee/tea pause reminders."
+        },
+        "smartGreeting.lunchReminder": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable daily lunch break reminder."
+        },
+        "smartGreeting.lunchTime": {
+          "type": "string",
+          "default": "13:00",
+          "description": "Time of day for lunch break alert in 24-hour HH:mm format."
+        },
+        "smartGreeting.postureReminder": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable periodic ergonomic posture and 20-20-20 eye stretch reminders."
+        },
+        "smartGreeting.postureIntervalMinutes": {
+          "type": "integer",
+          "default": 30,
+          "minimum": 15,
+          "maximum": 120,
+          "description": "Interval in minutes between posture checks and eye rest reminders."
         }
       }
     }
