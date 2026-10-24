@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>SmartGreeting.Preview</RootNamespace>
+    <AssemblyName>SmartGreeting.Preview</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SmartGreeting.Core\SmartGreeting.Core.csproj" />
+    <ProjectReference Include="..\SmartGreeting.UI\SmartGreeting.UI.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,162 @@
+<Window x:Class="SmartGreeting.Preview.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SmartGreeting Preview &amp; Configuration Studio"
+        Height="620" Width="780"
+        WindowStartupLocation="CenterScreen"
+        Background="#181A20"
+        Foreground="#ECEFF4"
+        FontFamily="Segoe UI Variable Text, Segoe UI, sans-serif">
+
+    <Window.Resources>
+        <Style x:Key="HeaderLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+
+        <Style x:Key="CardPanel" TargetType="Border">
+            <Setter Property="Background" Value="#22252E"/>
+            <Setter Property="BorderBrush" Value="#323846"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="18"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="Background" Value="#2E3442"/>
+            <Setter Property="Foreground" Value="#ECEFF4"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Margin" Value="0,0,10,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#3D4558"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#0078D4"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#108CEB"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Top Header -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                <TextBlock Text="⚡ SmartGreeting Visual Studio Extension" FontSize="22" FontWeight="Bold" Foreground="#FFFFFF"/>
+                <TextBlock Text="Local Interactive Preview &amp; Runtime Testing Dashboard" FontSize="13" Foreground="#9AA0A6" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Test Trigger Buttons -->
+            <Border Grid.Row="1" Style="{StaticResource CardPanel}">
+                <StackPanel>
+                    <TextBlock Text="Interactive Toast Previews (Floating Cards)" Style="{StaticResource HeaderLabel}"/>
+                    <TextBlock Text="Click any button to trigger the exact floating card that appears inside Visual Studio:" FontSize="13" Foreground="#A0A8B8" Margin="0,0,0,14"/>
+
+                    <WrapPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource PrimaryButton}" Content="⏱️ Live System Time Greeting" Click="OnLiveSystemTimeClicked"/>
+                        <Button Style="{StaticResource ActionButton}" Content="☀️ Morning Greeting (05:00 - 11:59)" Click="OnMorningClicked"/>
+                        <Button Style="{StaticResource ActionButton}" Content="🌤️ Afternoon Greeting (12:00 - 16:59)" Click="OnAfternoonClicked"/>
+                        <Button Style="{StaticResource ActionButton}" Content="🌆 Evening Greeting (17:00 - 20:59)" Click="OnEveningClicked"/>
+                        <Button Style="{StaticResource ActionButton}" Content="🌙 Late Night Greeting (21:00 - 04:59)" Click="OnLateNightClicked"/>
+                        <Button Style="{StaticResource ActionButton}" Content="☕ Monday Motivation" Click="OnMondayClicked"/>
+                        <Button Style="{StaticResource ActionButton}" Content="🚀 Friday Vibes" Click="OnFridayClicked"/>
+                        <Button Style="{StaticResource ActionButton}" Content="💻 Weekend Warrior" Click="OnWeekendClicked"/>
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Settings Configuration Panel -->
+            <Border Grid.Row="2" Style="{StaticResource CardPanel}">
+                <StackPanel>
+                    <TextBlock Text="Personalization &amp; Working Hours Configuration" Style="{StaticResource HeaderLabel}"/>
+
+                    <Grid Margin="0,6,0,14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Name -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Developer Name:" VerticalAlignment="Center" Margin="0,0,0,12" Foreground="#D0D4DC"/>
+                        <TextBox x:Name="NameInput" Grid.Row="0" Grid.Column="1" Text="Avi" Padding="8,6" Background="#16181E" Foreground="#FFF" BorderBrush="#3C4252" Margin="0,0,0,12"/>
+
+                        <!-- Working Hours Start -->
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Working Hours Start:" VerticalAlignment="Center" Margin="0,0,0,12" Foreground="#D0D4DC"/>
+                        <TextBox x:Name="StartHourInput" Grid.Row="1" Grid.Column="1" Text="09:00" Padding="8,6" Background="#16181E" Foreground="#FFF" BorderBrush="#3C4252" Margin="0,0,0,12"/>
+
+                        <!-- Working Hours End -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Working Hours End:" VerticalAlignment="Center" Margin="0,0,0,12" Foreground="#D0D4DC"/>
+                        <TextBox x:Name="EndHourInput" Grid.Row="2" Grid.Column="1" Text="18:00" Padding="8,6" Background="#16181E" Foreground="#FFF" BorderBrush="#3C4252" Margin="0,0,0,12"/>
+
+                        <!-- Auto-Dismiss Seconds -->
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Auto-Dismiss Seconds:" VerticalAlignment="Center" Margin="0,0,0,12" Foreground="#D0D4DC"/>
+                        <TextBox x:Name="DismissSecondsInput" Grid.Row="3" Grid.Column="1" Text="8" Padding="8,6" Background="#16181E" Foreground="#FFF" BorderBrush="#3C4252" Margin="0,0,0,12"/>
+
+                        <!-- Options Checkboxes -->
+                        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" Margin="0,4,0,0">
+                            <CheckBox x:Name="SoundCheckBox" Content="Enable Sound Effect" Foreground="#D0D4DC" Margin="0,0,20,0"/>
+                            <CheckBox x:Name="LateNightCheckBox" Content="Late Night Encouragement" IsChecked="True" Foreground="#D0D4DC" Margin="0,0,20,0"/>
+                            <CheckBox x:Name="WeekendCheckBox" Content="Weekend Awareness" IsChecked="True" Foreground="#D0D4DC"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource PrimaryButton}" Content="💾 Save Settings to Local Storage" Click="OnSaveSettingsClicked"/>
+                        <Button Style="{StaticResource ActionButton}" Content="📂 Open Local Storage &amp; Logs Folder" Click="OnOpenLogsClicked"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Status Footer -->
+            <Border Grid.Row="3" Background="#14161C" CornerRadius="8" Padding="14,10">
+                <TextBlock x:Name="StatusTextBlock" Text="Ready. Click any preview button above to test the floating card UI." Foreground="#8892A2" FontSize="12"/>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</Window>

@@ -1,0 +1,11 @@
+## Visual Studio & .NET GitIgnore
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.log
+artifacts/*.vsix.tmp
+TestResults/

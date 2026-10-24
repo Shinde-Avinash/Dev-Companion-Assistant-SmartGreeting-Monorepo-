@@ -1,0 +1,93 @@
+<UserControl x:Class="SmartGreeting.Vsix.UI.SmartGreetingOptionsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="550" d:DesignWidth="500"
+             FontFamily="Segoe UI Variable Text, Segoe UI, sans-serif">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="16">
+            <TextBlock Text="SmartGreeting Configuration" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,14"/>
+
+            <!-- General -->
+            <GroupBox Header="General" Margin="0,0,0,12" Padding="10">
+                <StackPanel>
+                    <CheckBox x:Name="EnabledBox" Content="Enable SmartGreeting" Margin="0,0,0,8" FontWeight="SemiBold"/>
+                    <Grid Margin="0,4,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Your Name:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="NameInput" Grid.Column="1" Padding="4,3"/>
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Working Hours -->
+            <GroupBox Header="Working Hours Awareness" Margin="0,0,0,12" Padding="10">
+                <StackPanel>
+                    <Grid Margin="0,4,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Work Start Time:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="StartHourInput" Grid.Column="1" Text="09:00" Padding="4,3"/>
+                    </Grid>
+                    <Grid Margin="0,0,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Work End Time:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="EndHourInput" Grid.Column="1" Text="18:00" Padding="4,3"/>
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Triggers & Frequency -->
+            <GroupBox Header="Greeting Triggers &amp; Frequency" Margin="0,0,0,12" Padding="10">
+                <StackPanel>
+                    <CheckBox x:Name="StartupBox" Content="Show on Visual Studio Startup" Margin="0,0,0,8"/>
+                    <CheckBox x:Name="SolutionOpenBox" Content="Show on Solution Open" Margin="0,0,0,8"/>
+
+                    <Grid Margin="0,4,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Greeting Frequency:" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="FrequencyCombo" Grid.Column="1" Padding="4,3">
+                            <ComboBoxItem Content="Once per Visual Studio session"/>
+                            <ComboBoxItem Content="Once per day"/>
+                            <ComboBoxItem Content="Every Visual Studio startup"/>
+                            <ComboBoxItem Content="Manual only"/>
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Personalization & Visuals -->
+            <GroupBox Header="Visuals &amp; Audio" Margin="0,0,0,12" Padding="10">
+                <StackPanel>
+                    <CheckBox x:Name="LateNightBox" Content="Enable Late Night Friendly Reminders" Margin="0,0,0,8"/>
+                    <CheckBox x:Name="WeekendBox" Content="Enable Weekend Awareness" Margin="0,0,0,8"/>
+                    <CheckBox x:Name="AnimationsBox" Content="Enable Card Entrance/Exit Animations" Margin="0,0,0,8"/>
+                    <CheckBox x:Name="SoundBox" Content="Play subtle greeting sound effect" Margin="0,0,0,8"/>
+
+                    <Grid Margin="0,4,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Auto-Dismiss Seconds:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="DismissSecondsInput" Grid.Column="1" Text="8" Padding="4,3"/>
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

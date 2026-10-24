@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>SmartGreeting.Vsix</RootNamespace>
+    <AssemblyName>SmartGreeting</AssemblyName>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SmartGreeting.Core\SmartGreeting.Core.csproj" />
+    <ProjectReference Include="..\SmartGreeting.UI\SmartGreeting.UI.csproj" />
+  </ItemGroup>
+
+</Project>
